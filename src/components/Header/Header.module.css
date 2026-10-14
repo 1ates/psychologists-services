@@ -1,0 +1,71 @@
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 24px 128px;
+  background-color: transparent;
+  border-bottom: 1px solid rgba(25, 26, 21, 0.1);
+}
+
+.logo {
+  font-weight: 700;
+  font-size: 20px;
+  line-height: 24px;
+  color: #191a15;
+  text-decoration: none;
+}
+
+.logoAccent {
+  color: #54be96;
+}
+
+.nav {
+  display: flex;
+  gap: 40px;
+}
+
+.navLink {
+  text-decoration: none;
+  color: #191a15;
+  font-size: 16px;
+  line-height: 20px;
+}
+
+.navLink:hover, .active {
+  color: #54be96;
+}
+
+.authBlock {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.loginBtn {
+  background: none;
+  border: 1px solid rgba(25, 26, 21, 0.2);
+  border-radius: 30px;
+  padding: 14px 39px;
+  font-size: 16px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.registerBtn {
+  background: #54be96;
+  border: none;
+  border-radius: 30px;
+  padding: 14px 40px;
+  color: #fbfbfb;
+  font-size: 16px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+@media (max-width: 768px) {
+  .header {
+    padding: 16px 24px;
+    flex-direction: column;
+    gap: 16px;
+  }
+}
