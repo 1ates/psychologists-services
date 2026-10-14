@@ -1,0 +1,61 @@
+[
+  {
+    "name": "Nataliia Trokhymchuk",
+    "avatar_url": "https://ftp.goit.study/img/avatars/1.jpg",
+    "experience": "8 years",
+    "reviews": [
+      {
+        "comment": "Nataliia helped me through a very difficult time. Extremely professional and empathetic.",
+        "rating": 5,
+        "reviewer": "Alice"
+      },
+      {
+        "comment": "Great sessions, very insightful.",
+        "rating": 4,
+        "reviewer": "Bob"
+      }
+    ],
+    "price_per_hour": 150,
+    "rating": 4.8,
+    "license": "L-12345",
+    "specialization": "Relationships, anxiety, depression",
+    "initial_consultation": "50 USD",
+    "about": "Certified psychologist with 8 years of experience helping clients overcome emotional hurdles, anxiety, and relationship issues."
+  },
+  {
+    "name": "Svitlana Shylova",
+    "avatar_url": "https://ftp.goit.study/img/avatars/2.jpg",
+    "experience": "10 years",
+    "reviews": [
+      {
+        "comment": "Very structured approach, helped me understand my behavior patterns.",
+        "rating": 5,
+        "reviewer": "Charlie"
+      }
+    ],
+    "price_per_hour": 200,
+    "rating": 4.9,
+    "license": "L-67890",
+    "specialization": "Career coaching, trauma, self-esteem",
+    "initial_consultation": "70 USD",
+    "about": "Experienced psychologist focusing on trauma recovery, career transitions, and boosting personal self-esteem."
+  },
+  {
+    "name": "Oleg Ivanchenko",
+    "avatar_url": "https://ftp.goit.study/img/avatars/3.jpg",
+    "experience": "5 years",
+    "reviews": [
+      {
+        "comment": "Good listener and very practical advice.",
+        "rating": 4,
+        "reviewer": "Diana"
+      }
+    ],
+    "price_per_hour": 120,
+    "rating": 4.6,
+    "license": "L-11223",
+    "specialization": "Family counseling, stress management",
+    "initial_consultation": "40 USD",
+    "about": "Specializing in family dynamics and stress management techniques for modern professionals."
+  }
+]
