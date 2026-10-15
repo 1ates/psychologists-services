@@ -3,11 +3,13 @@ import styles from "./PsychologistCard.module.css";
 import { useAuth } from "../../context/AuthContext";
 import { doc, getDoc, updateDoc, arrayUnion, arrayRemove } from "firebase/firestore";
 import { db } from "../../firebase";
+import AppointmentModal from "../AppointmentModal/AppointmentModal";
 
 const PsychologistCard = ({ psychologist, onAuthRequired }) => {
   const { user } = useAuth();
   const [isFavorite, setIsFavorite] = useState(false);
   const [isExpanded, setIsExpanded] = useState(false);
+  const [isAppointmentOpen, setIsAppointmentOpen] = useState(false);
 
   useEffect(() => {
     const checkFavorite = async () => {
@@ -49,8 +51,7 @@ const PsychologistCard = ({ psychologist, onAuthRequired }) => {
       if (onAuthRequired) onAuthRequired("login");
       return;
     }
-    // TODO: Open Appointment Modal
-    alert("Appointment modal will open here.");
+    setIsAppointmentOpen(true);
   };
 
   return (
@@ -120,6 +121,10 @@ const PsychologistCard = ({ psychologist, onAuthRequired }) => {
           </div>
         )}
       </div>
+
+      {isAppointmentOpen && (
+        <AppointmentModal psychologist={psychologist} onClose={() => setIsAppointmentOpen(false)} />
+      )}
     </div>
   );
 };
