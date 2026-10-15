@@ -60,21 +60,28 @@
 .detailsList {
   display: flex;
   flex-wrap: wrap;
-  gap: 16px;
-  background: #f3f3f3;
-  padding: 12px;
-  border-radius: 8px;
-  margin-bottom: 24px;
+  gap: 8px;
+  padding: 0;
+  margin: 0 0 24px 0;
+  list-style: none;
 }
 
 .detailItem {
   font-size: 16px;
   color: #191a15;
+  padding: 8px 16px;
+  border-radius: 24px;
 }
 
 .detailItem span {
   color: #8a8a89;
 }
+
+/* Individual backgrounds */
+.detailItem:nth-child(1) { background-color: #f3f3f3; }
+.detailItem:nth-child(2) { background-color: #e8f9f2; }
+.detailItem:nth-child(3) { background-color: #fdf3e8; }
+.detailItem:nth-child(4) { background-color: #fcebeb; }
 
 .about {
   color: rgba(25, 26, 21, 0.5);
@@ -91,6 +98,11 @@
   font-weight: 500;
   cursor: pointer;
   padding: 0;
+  transition: color 0.2s;
+}
+
+.readMoreBtn:hover {
+  color: #54be96;
 }
 
 .actions {
@@ -104,6 +116,11 @@
   border: none;
   cursor: pointer;
   font-size: 24px;
+  transition: transform 0.2s;
+}
+
+.favoriteBtn:hover {
+  transform: scale(1.1);
 }
 
 .appointmentBtn {
@@ -114,6 +131,12 @@
   padding: 14px 32px;
   font-weight: 500;
   cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.appointmentBtn:hover {
+  box-shadow: 0px 4px 12px rgba(84, 190, 150, 0.4);
+  transform: translateY(-2px);
 }
 
 @media (max-width: 768px) {
