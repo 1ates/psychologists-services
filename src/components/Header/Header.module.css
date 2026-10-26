@@ -2,9 +2,12 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 24px 128px;
-  background-color: transparent;
-  border-bottom: 1px solid rgba(25, 26, 21, 0.1);
+  min-height: 96px;
+  padding: 24px clamp(24px, 8vw, 128px);
+  background-color: var(--surface);
+  border-bottom: 1px solid var(--border);
+  position: relative;
+  z-index: 10;
 }
 
 .logo {
@@ -13,15 +16,23 @@
   line-height: 24px;
   color: #191a15;
   text-decoration: none;
+  letter-spacing: -0.02em;
 }
 
 .logoAccent {
-  color: #54be96;
+  color: var(--primary-color, #54be96);
 }
 
 .nav {
   display: flex;
-  gap: 40px;
+  gap: 44px;
+}
+
+.navLinkWrapper {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 .navLink {
@@ -29,10 +40,20 @@
   color: #191a15;
   font-size: 16px;
   line-height: 20px;
+  transition: color 0.2s;
 }
 
-.navLink:hover, .active {
-  color: #54be96;
+.navLink:hover {
+  color: var(--primary-color, #54be96);
+}
+
+.activeDot {
+  position: absolute;
+  bottom: -8px;
+  width: 6px;
+  height: 6px;
+  background-color: var(--primary-color, #54be96);
+  border-radius: 50%;
 }
 
 .authBlock {
@@ -43,16 +64,22 @@
 
 .loginBtn {
   background: none;
-  border: 1px solid rgba(25, 26, 21, 0.2);
+  border: 1px solid var(--border);
   border-radius: 30px;
   padding: 14px 39px;
   font-size: 16px;
   font-weight: 700;
   cursor: pointer;
+  transition: all 0.2s;
+}
+
+.loginBtn:hover {
+  border-color: var(--primary-color, #54be96);
+  color: var(--primary-color, #54be96);
 }
 
 .registerBtn {
-  background: #54be96;
+  background: var(--primary-color, #54be96);
   border: none;
   border-radius: 30px;
   padding: 14px 40px;
@@ -60,12 +87,137 @@
   font-size: 16px;
   font-weight: 700;
   cursor: pointer;
+  transition: all 0.2s;
+}
+
+.loginBtn:focus-visible,
+.registerBtn:focus-visible,
+.profileBtn:focus-visible,
+.navLink:focus-visible {
+  outline: 3px solid rgba(84, 190, 150, 0.35);
+  outline-offset: 3px;
+}
+
+.registerBtn:hover {
+  opacity: 0.9;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.15);
+}
+
+.profileMenuContainer {
+  position: relative;
+}
+
+.profileBtn {
+  background: #f3f3f3;
+  border: none;
+  border-radius: 30px;
+  padding: 10px 24px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.dropdown {
+  position: absolute;
+  top: calc(100% + 10px);
+  right: 0;
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.1);
+  width: 180px;
+  /* overflow: hidden kaldırıldı — alt menünün taşmasına izin ver */
+  z-index: 200;
+}
+
+.dropdownItem {
+  padding: 12px 16px;
+  cursor: pointer;
+  font-size: 14px;
+  color: #191a15;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-radius: 12px;
+}
+
+.dropdownItem:hover {
+  background: #f3f3f3;
+}
+
+/* Theme satırı — alt menüyü barındırır */
+.themeWrapper {
+  position: relative;
+}
+
+/* Alt menü: varsayılan gizli */
+.themeSubMenu {
+  display: none;
+  position: absolute;
+  right: calc(100% + 4px);
+  top: 0;
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.15);
+  width: 150px;
+  z-index: 9999;
+}
+
+/* JS tarafından isOpen sınıfı eklenince göster */
+.themeSubMenuOpen {
+  display: block;
+}
+
+.themeOption {
+  padding: 10px 16px;
+  font-size: 14px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  border-radius: 12px;
+}
+
+.themeOption:hover {
+  background: #f3f3f3;
+}
+
+.colorBadge {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  flex-shrink: 0;
 }
 
 @media (max-width: 768px) {
   .header {
-    padding: 16px 24px;
-    flex-direction: column;
-    gap: 16px;
+    min-height: 76px;
+    padding: 16px 20px;
+    flex-wrap: wrap;
+    gap: 14px 24px;
+  }
+
+  .logo {
+    font-size: 18px;
+  }
+
+  .nav {
+    order: 3;
+    width: 100%;
+    justify-content: center;
+    gap: 28px;
+  }
+
+  .authBlock {
+    margin-left: auto;
+    gap: 8px;
+  }
+
+  .loginBtn,
+  .registerBtn {
+    padding: 10px 14px;
+    font-size: 14px;
   }
 }

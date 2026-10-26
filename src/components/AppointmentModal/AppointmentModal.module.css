@@ -45,25 +45,48 @@
   gap: 18px;
 }
 
+.inputRow {
+  display: flex;
+  gap: 10px;
+}
+
+.inputRow > div {
+  flex: 1;
+}
+
 .input {
   width: 100%;
   padding: 16px 18px;
   border: 1px solid rgba(18, 20, 23, 0.1);
   border-radius: 12px;
+  font-size: 16px;
+  outline: none;
+  transition: border-color 0.2s;
+}
+
+.input:focus {
+  border-color: var(--primary-color);
 }
 
 .submitBtn {
-  background: #54be96;
+  background: var(--primary-color);
   color: #fff;
   border: none;
   padding: 16px;
   border-radius: 30px;
+  font-size: 16px;
   font-weight: 700;
   cursor: pointer;
   margin-top: 20px;
+  transition: all 0.2s ease;
+}
+
+.submitBtn:hover {
+  box-shadow: 0px 4px 12px var(--primary-shadow);
+  transform: translateY(-1px);
 }
 
 .error {
-  color: red;
+  color: #e74c3c;
   font-size: 12px;
 }

@@ -42,12 +42,12 @@ const AppointmentModal = ({ psychologist, onClose }) => {
           <input {...register("name")} placeholder="Full Name" className={styles.input} />
           {errors.name && <p className={styles.error}>{errors.name.message}</p>}
 
-          <div style={{ display: "flex", gap: "10px" }}>
-            <div style={{ flex: 1 }}>
+          <div className={styles.inputRow}>
+            <div>
               <input {...register("phone")} placeholder="Phone" className={styles.input} />
               {errors.phone && <p className={styles.error}>{errors.phone.message}</p>}
             </div>
-            <div style={{ flex: 1 }}>
+            <div>
               <input {...register("time")} type="time" placeholder="00:00" className={styles.input} />
               {errors.time && <p className={styles.error}>{errors.time.message}</p>}
             </div>

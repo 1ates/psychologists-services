@@ -1,5 +1,7 @@
 .container {
-  padding: 40px 128px;
+  width: min(100% - 48px, 1184px);
+  margin: 0 auto;
+  padding: 56px 0 80px;
   background-color: #f3f3f3;
   min-height: 100vh;
 }
@@ -12,7 +14,9 @@
 }
 
 .title {
-  font-size: 32px;
+  font-size: 40px;
+  line-height: 1.1;
+  margin: 0;
   color: #191a15;
 }
 
@@ -31,8 +35,10 @@
   padding: 14px 18px;
   border-radius: 14px;
   border: none;
-  background-color: #54be96;
-  color: #fff;
+  background-color: var(--surface);
+  border: 1px solid var(--border);
+  min-width: 180px;
+  color: var(--text);
   font-weight: 500;
   cursor: pointer;
   outline: none;
@@ -40,7 +46,8 @@
 }
 
 .filterSelect:hover {
-  box-shadow: 0px 4px 10px rgba(84, 190, 150, 0.3);
+  border-color: var(--primary-color);
+  box-shadow: 0px 4px 10px rgba(25, 26, 21, 0.06);
 }
 
 .loadMoreContainer {
@@ -49,7 +56,7 @@
 }
 
 .loadMoreBtn {
-  background: #54be96;
+  background: var(--primary-color);
   color: #fff;
   border: none;
   padding: 14px 48px;
@@ -61,6 +68,27 @@
 }
 
 .loadMoreBtn:hover {
-  box-shadow: 0px 4px 12px rgba(84, 190, 150, 0.4);
+  box-shadow: 0px 4px 12px var(--primary-shadow);
   transform: translateY(-2px);
+}
+
+@media (max-width: 768px) {
+  .container {
+    width: 100%;
+    padding: 36px 20px 64px;
+  }
+
+  .topBar {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  .title {
+    font-size: 32px;
+  }
+
+  .filterSelect {
+    width: 100%;
+  }
 }

@@ -1,11 +1,12 @@
 .card {
-  background: #fbfbfb;
+  background: var(--surface);
   border-radius: 24px;
-  padding: 24px;
+  padding: 24px 28px;
   display: flex;
   gap: 24px;
   margin-bottom: 24px;
   position: relative;
+  box-shadow: 0 2px 12px rgba(25, 26, 21, 0.03);
 }
 
 .avatarContainer {
@@ -73,11 +74,6 @@
   border-radius: 24px;
 }
 
-.detailItem span {
-  color: #8a8a89;
-}
-
-/* Individual backgrounds */
 .detailItem:nth-child(1) { background-color: #f3f3f3; }
 .detailItem:nth-child(2) { background-color: #e8f9f2; }
 .detailItem:nth-child(3) { background-color: #fdf3e8; }
@@ -88,6 +84,10 @@
   font-size: 16px;
   line-height: 22px;
   margin-bottom: 24px;
+}
+
+.price {
+  color: var(--primary-color, #54be96);
 }
 
 .readMoreBtn {
@@ -102,18 +102,27 @@
 }
 
 .readMoreBtn:hover {
-  color: #54be96;
+  color: var(--primary-color, #54be96);
 }
 
 .actions {
   display: flex;
   align-items: center;
   gap: 28px;
+  color: #8a8a89;
+  font-size: 14px;
+}
+
+.rating {
+  display: flex;
+  align-items: center;
+  gap: 8px;
 }
 
 .favoriteBtn {
   background: none;
   border: none;
+  color: var(--primary-color, #54be96);
   cursor: pointer;
   font-size: 24px;
   transition: transform 0.2s;
@@ -123,8 +132,58 @@
   transform: scale(1.1);
 }
 
+.reviewsSection {
+  margin-top: 24px;
+}
+
+.reviewItem {
+  margin-bottom: 24px;
+}
+
+.reviewHeader {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.reviewerAvatar {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background-color: var(--primary-color, #54be96);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  font-weight: bold;
+}
+
+.reviewerName {
+  margin: 0;
+  font-size: 16px;
+}
+
+.reviewRating {
+  font-size: 16px;
+  font-weight: 500;
+  color: #191a15;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.reviewComment {
+  color: rgba(25, 26, 21, 0.5);
+  font-size: 16px;
+}
+
+.appointmentBtnContainer {
+  margin-top: 24px;
+}
+
 .appointmentBtn {
-  background: #54be96;
+  background: var(--primary-color, #54be96);
   color: #fff;
   border: none;
   border-radius: 30px;
@@ -134,13 +193,46 @@
   transition: all 0.3s ease;
 }
 
+@media (max-width: 768px) {
+  .card {
+    padding: 20px;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .avatarContainer {
+    width: 80px;
+    height: 80px;
+  }
+
+  .headerInfo {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .actions {
+    width: 100%;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+
+  .name {
+    font-size: 22px;
+  }
+
+  .detailsList {
+    gap: 6px;
+  }
+
+  .detailItem {
+    font-size: 14px;
+    padding: 7px 10px;
+  }
+}
+
 .appointmentBtn:hover {
   box-shadow: 0px 4px 12px rgba(84, 190, 150, 0.4);
   transform: translateY(-2px);
-}
-
-@media (max-width: 768px) {
-  .card {
-    flex-direction: column;
-  }
 }
