@@ -1,0 +1,111 @@
+.container {
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 48px clamp(24px, 8vw, 64px);
+  color: #191a15;
+}
+
+.title {
+  font-size: 32px;
+  line-height: 40px;
+  font-weight: 700;
+  margin: 0 0 8px 0;
+  letter-spacing: -0.02em;
+}
+
+.lastUpdated {
+  font-size: 14px;
+  line-height: 20px;
+  color: #666;
+  margin: 0 0 32px 0;
+}
+
+.intro {
+  font-size: 16px;
+  line-height: 24px;
+  margin: 0 0 24px 0;
+}
+
+.subtitle {
+  font-size: 20px;
+  line-height: 28px;
+  font-weight: 600;
+  margin: 28px 0 12px 0;
+  color: #191a15;
+}
+
+.text {
+  font-size: 16px;
+  line-height: 24px;
+  margin: 0 0 16px 0;
+}
+
+.list {
+  margin: 0 0 16px 0;
+  padding-left: 20px;
+  list-style-type: disc;
+}
+
+.listItem {
+  font-size: 16px;
+  line-height: 24px;
+  margin: 0 0 8px 0;
+}
+
+.actions {
+  margin-top: 48px;
+  display: flex;
+  gap: 12px;
+}
+
+.backLink {
+  display: inline-flex;
+  align-items: center;
+  padding: 12px 24px;
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--primary-color, #54be96);
+  text-decoration: none;
+  border: 1px solid var(--primary-color, #54be96);
+  border-radius: 30px;
+  transition: all 0.2s;
+}
+
+.backLink:hover {
+  background: var(--primary-color, #54be96);
+  color: #fbfbfb;
+}
+
+.backLink:focus-visible {
+  outline: 3px solid rgba(84, 190, 150, 0.35);
+  outline-offset: 3px;
+}
+
+.address {
+  font-style: normal;
+  font-size: 16px;
+  line-height: 24px;
+  margin: 0 0 16px 0;
+}
+
+@media (max-width: 768px) {
+  .container {
+    padding: 32px 20px;
+  }
+
+  .title {
+    font-size: 24px;
+    line-height: 32px;
+  }
+
+  .subtitle {
+    font-size: 18px;
+    line-height: 26px;
+  }
+
+  .text,
+  .listItem {
+    font-size: 15px;
+    line-height: 22px;
+  }
+}

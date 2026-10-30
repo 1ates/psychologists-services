@@ -1,5 +1,5 @@
 .container {
-  padding: 40px 128px;
+  padding: 40px 8vw;
   background-color: #f3f3f3;
   min-height: 100vh;
 }
@@ -13,4 +13,9 @@
 .emptyText {
   font-size: 18px;
   color: #8a8a89;
+}
+
+.error {
+  margin: 0 0 24px;
+  color: #c0392b;
 }

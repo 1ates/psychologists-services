@@ -1,0 +1,27 @@
+.backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: auto;
+  padding: 20px;
+  background-color: rgba(18, 20, 23, 0.6);
+}
+
+.dialog {
+  width: min(100%, 600px);
+  max-height: calc(100dvh - 40px);
+}
+
+@media (max-width: 600px) {
+  .backdrop {
+    align-items: flex-start;
+    padding: 12px;
+  }
+
+  .dialog {
+    max-height: calc(100dvh - 24px);
+  }
+}

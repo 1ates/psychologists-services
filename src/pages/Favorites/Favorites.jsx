@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from "react";
-import { doc, getDoc, collection, query, where, getDocs } from "firebase/firestore";
+import { useEffect, useState } from "react";
+import { get, ref } from "firebase/database";
 import { db } from "../../firebase";
 import { useAuth } from "../../context/AuthContext";
 import PsychologistCard from "../../components/PsychologistCard/PsychologistCard";
@@ -10,57 +10,67 @@ const Favorites = () => {
   const { user, loading: authLoading } = useAuth();
   const [favorites, setFavorites] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
-  const fetchFavorites = async () => {
-    if (!user) {
-      setLoading(false);
-      return;
-    }
+  useEffect(() => {
+    let isCancelled = false;
 
-    try {
-      const userDoc = await getDoc(doc(db, "users", user.uid));
-      const favoriteIds = userDoc.exists() ? userDoc.data().favorites : [];
-
-      if (favoriteIds.length === 0) {
+    const fetchFavorites = async () => {
+      if (!user) {
         setFavorites([]);
         setLoading(false);
         return;
       }
 
-      const psychRef = collection(db, "psychologists");
-      const q = query(psychRef, where("__name__", "in", favoriteIds));
-      const querySnapshot = await getDocs(q);
+      setLoading(true);
+      setError(null);
 
-      const favPsychs = querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-      setFavorites(favPsychs);
-    } catch (error) {
-      console.error("Error fetching favorites:", error);
-    } finally {
-      setLoading(false);
-    }
-  };
+      try {
+        const favoriteSnapshot = await get(ref(db, `users/${user.uid}/favorites`));
+        const favoriteIds = Object.entries(favoriteSnapshot.val() || {})
+          .filter(([, value]) => value === true)
+          .map(([id]) => id);
 
-  useEffect(() => {
-    if (!authLoading) {
-      fetchFavorites();
-    }
-  }, [user, authLoading]);
+        const psychologistSnapshots = await Promise.all(
+          favoriteIds.map((id) => get(ref(db, `psychologists/${id}`))),
+        );
+        const favoritePsychologists = psychologistSnapshots.reduce((result, snapshot, index) => {
+          if (snapshot.exists()) {
+            result.push({ id: favoriteIds[index], ...snapshot.val() });
+          }
+          return result;
+        }, []);
+
+        if (!isCancelled) setFavorites(favoritePsychologists);
+      } catch {
+        if (!isCancelled) setError("We could not load your favorites. Please try again.");
+      } finally {
+        if (!isCancelled) setLoading(false);
+      }
+    };
+
+    fetchFavorites();
+    return () => {
+      isCancelled = true;
+    };
+  }, [user]);
 
   const handleFavoriteChange = (removedId) => {
-    setFavorites(prev => prev.filter(item => item.id !== removedId));
+    setFavorites((previousFavorites) => previousFavorites.filter((item) => item.id !== removedId));
   };
 
   if (authLoading || loading) return <Loader />;
   if (!user) return <div className={styles.container}>Please log in to view favorites.</div>;
 
   return (
-    <div className={styles.container}>
-      <h2 className={styles.title}>Favorites</h2>
-      {favorites.length === 0 ? (
+    <section className={styles.container} aria-labelledby="favorites-title">
+      <h1 id="favorites-title" className={styles.title}>Favorites</h1>
+      {error && <p className={styles.error} role="alert">{error}</p>}
+      {favorites.length === 0 && !error ? (
         <p className={styles.emptyText}>No favorites added yet.</p>
       ) : (
         <div>
-          {favorites.map(psychologist => (
+          {favorites.map((psychologist) => (
             <PsychologistCard
               key={psychologist.id}
               psychologist={psychologist}
@@ -69,7 +79,7 @@ const Favorites = () => {
           ))}
         </div>
       )}
-    </div>
+    </section>
   );
 };
 

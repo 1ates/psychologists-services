@@ -1,0 +1,61 @@
+.container {
+  display: grid;
+  min-height: calc(100vh - 96px);
+  place-content: center;
+  gap: 16px;
+  padding: 48px 20px;
+  text-align: center;
+  background: var(--surface-muted);
+}
+
+.code {
+  margin: 0;
+  color: var(--primary-color);
+  font-size: 72px;
+  font-weight: 700;
+}
+
+.container h1,
+.container p {
+  margin: 0;
+}
+
+.container p:not(.code) {
+  color: var(--text-muted);
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 12px;
+  margin-top: 16px;
+}
+
+.primaryLink,
+.secondaryLink {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 48px;
+  padding: 12px 24px;
+  border-radius: 30px;
+  text-decoration: none;
+  font-weight: 700;
+}
+
+.primaryLink {
+  background: var(--primary-color);
+  color: #fff;
+}
+
+.secondaryLink {
+  border: 1px solid var(--border);
+  color: var(--text);
+}
+
+.primaryLink:focus-visible,
+.secondaryLink:focus-visible {
+  outline: 3px solid var(--primary-shadow);
+  outline-offset: 3px;
+}
