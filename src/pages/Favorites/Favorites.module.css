@@ -19,3 +19,30 @@
   margin: 0 0 24px;
   color: #c0392b;
 }
+
+.loadMoreContainer {
+  text-align: center;
+  margin-top: 32px;
+}
+
+.loadMoreBtn {
+  background: var(--primary-color);
+  color: #fff;
+  border: none;
+  padding: 14px 48px;
+  border-radius: 30px;
+  font-size: 16px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.loadMoreBtn:hover {
+  box-shadow: 0px 4px 12px var(--primary-shadow);
+  transform: translateY(-2px);
+}
+
+.loadMoreBtn:focus-visible {
+  outline: 3px solid var(--primary-shadow);
+  outline-offset: 3px;
+}
