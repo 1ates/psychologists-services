@@ -147,3 +147,10 @@ vite.config.ts.timestamp-*
 
 # Turbo Repo
 .turbo
+
+.claude/
+.claude
+.docs/
+.docs
+.DS_Store
+CLAUDE.md
