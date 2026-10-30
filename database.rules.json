@@ -1,0 +1,31 @@
+{
+  "rules": {
+    ".read": false,
+    ".write": false,
+    "psychologists": {
+      ".read": true,
+      ".indexOn": ["name", "price_per_hour", "rating"],
+      "$psychologistId": {
+        ".write": false
+      }
+    },
+    "users": {
+      "$uid": {
+        ".read": "auth !== null && auth.uid === $uid",
+        ".write": "auth !== null && auth.uid === $uid",
+        "favorites": {
+          "$psychologistId": {
+            ".validate": "!newData.exists() || (newData.val() === true && root.child('psychologists').child($psychologistId).exists())"
+          }
+        }
+      }
+    },
+    "appointments": {
+      "$appointmentId": {
+        ".read": "auth !== null && data.child('userId').val() === auth.uid",
+        ".write": "auth !== null && !data.exists() && newData.child('userId').val() === auth.uid",
+        ".validate": "newData.hasChildren(['schemaVersion', 'userId', 'psychologistId', 'psychologistName', 'name', 'email', 'phone', 'date', 'time', 'comment', 'status', 'createdAt']) && newData.child('schemaVersion').val() === 1 && newData.child('userId').isString() && newData.child('psychologistId').isString() && root.child('psychologists').child(newData.child('psychologistId').val()).exists() && newData.child('psychologistName').isString() && newData.child('name').isString() && newData.child('email').isString() && newData.child('phone').isString() && newData.child('date').isString() && newData.child('time').isString() && newData.child('comment').isString() && newData.child('status').val() === 'pending' && newData.child('createdAt').isNumber()"
+      }
+    }
+  }
+}

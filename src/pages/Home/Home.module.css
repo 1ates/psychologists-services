@@ -196,7 +196,7 @@
   line-height: 29px;
 }
 
-@media (max-width: 1100px) {
+@media (max-width: 1023px) {
   .homeContainer {
     min-height: auto;
     padding-top: 60px;
@@ -215,6 +215,20 @@
     width: min(464px, 100%);
     height: auto;
     aspect-ratio: 464 / 526;
+  }
+}
+
+@media (min-width: 1024px) and (max-width: 1280px) {
+  .homeContainer {
+    padding: 0 clamp(24px, 5vw, 80px);
+  }
+
+  .heroContent {
+    max-width: 520px;
+  }
+
+  .heroImageWrapper {
+    width: min(35%, 380px);
   }
 }
 
@@ -261,6 +275,10 @@
   .experienceBadge {
     text-align: left;
   }
+
+  .homeContainer::after {
+    display: none;
+  }
 }
 
 @media (max-width: 420px) {
@@ -274,5 +292,19 @@
 
   .badgeValue {
     font-size: 21px;
+  }
+}
+
+@media (max-width: 425px) {
+  .purpleSquare {
+    left: 0;
+  }
+
+  .yellowSquare {
+    right: 0;
+  }
+
+  .experienceBadge {
+    left: 0;
   }
 }

@@ -1,5 +1,5 @@
-import React, { useState, useEffect, useRef } from "react";
-import { NavLink, Link } from "react-router-dom";
+import { useEffect, useRef, useState } from "react";
+import { Link, NavLink } from "react-router-dom";
 import AuthModal from "../AuthModal/AuthModal";
 import { useAuth } from "../../context/AuthContext";
 import styles from "./Header.module.css";
@@ -10,7 +10,9 @@ const Header = () => {
   const [authType, setAuthType] = useState(null);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [isThemeOpen, setIsThemeOpen] = useState(false);
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
   const dropdownRef = useRef(null);
+  const navRef = useRef(null);
 
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -18,11 +20,15 @@ const Header = () => {
         setIsDropdownOpen(false);
         setIsThemeOpen(false);
       }
+      if (navRef.current && !navRef.current.contains(event.target)) {
+        setIsMenuOpen(false);
+      }
     };
-    const handleEsc = (e) => {
-      if (e.key === "Escape") {
+    const handleEsc = (event) => {
+      if (event.key === "Escape") {
         setIsDropdownOpen(false);
         setIsThemeOpen(false);
+        setIsMenuOpen(false);
       }
     };
 
@@ -34,76 +40,141 @@ const Header = () => {
     };
   }, []);
 
+  const closeMenus = () => {
+    setIsThemeOpen(false);
+    setIsDropdownOpen(false);
+    setIsMenuOpen(false);
+  };
+
+  const handleThemeChange = (nextTheme) => {
+    setTheme(nextTheme);
+    closeMenus();
+  };
+
+  const renderUserMenu = () => (
+    <div className={styles.profileMenuContainer} ref={dropdownRef}>
+      <button
+        type="button"
+        className={styles.profileBtn}
+        onClick={() => setIsDropdownOpen((isOpen) => !isOpen)}
+        aria-expanded={isDropdownOpen}
+        aria-controls="profile-menu"
+      >
+        <Icon name="user" width={20} height={20} />
+        <span>{user.displayName || user.email?.split("@")[0]}</span>
+      </button>
+
+      {isDropdownOpen && (
+        <div id="profile-menu" className={styles.dropdown} role="menu">
+          <div className={styles.themeWrapper}>
+            <button
+              type="button"
+              className={styles.dropdownItem}
+              onClick={() => setIsThemeOpen((isOpen) => !isOpen)}
+              aria-expanded={isThemeOpen}
+              aria-haspopup="menu"
+              role="menuitem"
+            >
+              <span>Theme</span>
+              <span aria-hidden="true">▶</span>
+            </button>
+            {isThemeOpen && (
+              <div className={`${styles.themeSubMenu} ${styles.themeSubMenuOpen}`} role="menu" aria-label="Theme options">
+                <button type="button" className={styles.themeOption} onClick={() => handleThemeChange("green")} role="menuitem">
+                  <span className={styles.colorBadge} style={{ backgroundColor: "#54BE96" }} aria-hidden="true" />
+                  Green {theme === "green" && <span aria-hidden="true">✓</span>}
+                </button>
+                <button type="button" className={styles.themeOption} onClick={() => handleThemeChange("blue")} role="menuitem">
+                  <span className={styles.colorBadge} style={{ backgroundColor: "#3470FF" }} aria-hidden="true" />
+                  Blue {theme === "blue" && <span aria-hidden="true">✓</span>}
+                </button>
+                <button type="button" className={styles.themeOption} onClick={() => handleThemeChange("orange")} role="menuitem">
+                  <span className={styles.colorBadge} style={{ backgroundColor: "#FC832C" }} aria-hidden="true" />
+                  Orange {theme === "orange" && <span aria-hidden="true">✓</span>}
+                </button>
+              </div>
+            )}
+          </div>
+          <button type="button" className={styles.dropdownItem} onClick={() => { logout(); closeMenus(); }} role="menuitem">
+            Log Out
+          </button>
+        </div>
+      )}
+    </div>
+  );
+
   return (
     <>
       <header className={styles.header}>
-        <Link to="/" className={styles.logo}>
+        <Link to="/" className={styles.logo} aria-label="Psychologists Services home">
           <span className={styles.logoAccent}>psychologists.</span>services
         </Link>
-        <nav className={styles.nav}>
-          <div className={styles.navLinkWrapper}>
-            <NavLink to="/" className={styles.navLink}>Home</NavLink>
-            <NavLink to="/" className={({ isActive }) => isActive ? styles.activeDot : ""} />
-          </div>
 
-          <div className={styles.navLinkWrapper}>
-            <NavLink to="/psychologists" className={styles.navLink}>Psychologists</NavLink>
-            <NavLink to="/psychologists" className={({ isActive }) => isActive ? styles.activeDot : ""} />
+        {user ? (
+          <div className={styles.headerRight}>
+            <button
+              type="button"
+              className={styles.hamburgerBtn}
+              onClick={() => {
+                setIsDropdownOpen(false);
+                setIsThemeOpen(false);
+                setIsMenuOpen((isOpen) => !isOpen);
+              }}
+              aria-expanded={isMenuOpen}
+              aria-label="Menü"
+            >
+              <span aria-hidden="true">☰</span>
+            </button>
+            <div className={styles.userMenu}>
+              {renderUserMenu()}
+            </div>
           </div>
+        ) : (
+          <button
+            type="button"
+            className={`${styles.hamburgerBtn} ${styles.hamburgerRight}`}
+            onClick={() => {
+              setIsDropdownOpen(false);
+              setIsThemeOpen(false);
+              setIsMenuOpen((isOpen) => !isOpen);
+            }}
+            aria-expanded={isMenuOpen}
+            aria-label="Menü"
+          >
+            <span aria-hidden="true">☰</span>
+          </button>
+        )}
 
-          {user && (
-            <div className={styles.navLinkWrapper}>
-              <NavLink to="/favorites" className={styles.navLink}>Favorites</NavLink>
-              <NavLink to="/favorites" className={({ isActive }) => isActive ? styles.activeDot : ""} />
+        <nav ref={navRef} className={`${styles.nav} ${isMenuOpen ? styles.navOpen : ""}`} aria-label="Primary navigation">
+          {!user && (
+            <div className={styles.mobileAuth}>
+              <button type="button" className={styles.loginBtn} onClick={() => { setAuthType("login"); setIsMenuOpen(false); }}>Log In</button>
+              <button type="button" className={styles.registerBtn} onClick={() => { setAuthType("register"); setIsMenuOpen(false); }}>Registration</button>
             </div>
           )}
+
+          <NavLink to="/" end onClick={() => setIsMenuOpen(false)} className={({ isActive }) => `${styles.navLink} ${isActive ? styles.navLinkActive : ""}`}>
+            Home
+          </NavLink>
+          <NavLink to="/psychologists" onClick={() => setIsMenuOpen(false)} className={({ isActive }) => `${styles.navLink} ${isActive ? styles.navLinkActive : ""}`}>
+            Psychologists
+          </NavLink>
+          {user && (
+            <NavLink to="/favorites" onClick={() => setIsMenuOpen(false)} className={({ isActive }) => `${styles.navLink} ${isActive ? styles.navLinkActive : ""}`}>
+              Favorites
+            </NavLink>
+          )}
+          <NavLink to="/privacy-policy" onClick={() => setIsMenuOpen(false)} className={({ isActive }) => `${styles.navLink} ${isActive ? styles.navLinkActive : ""}`}>
+            Gizlilik Politikası
+          </NavLink>
         </nav>
 
-        <div className={styles.authBlock}>
-          {user ? (
-            <div className={styles.profileMenuContainer} ref={dropdownRef}>
-              <button
-                className={styles.profileBtn}
-                onClick={() => setIsDropdownOpen(!isDropdownOpen)}
-              >
-                <Icon name="user" width={20} height={20} />
-                <span>{user.displayName || user.email.split("@")[0]}</span>
-              </button>
-
-              {isDropdownOpen && (
-                <div className={styles.dropdown}>
-                  <div className={`${styles.dropdownItem} ${styles.themeWrapper}`}
-                       onClick={(e) => { e.stopPropagation(); setIsThemeOpen(!isThemeOpen); }}>
-                    <span>Theme</span>
-                    <span>▶</span>
-                    <div className={`${styles.themeSubMenu} ${isThemeOpen ? styles.themeSubMenuOpen : ""}`}>
-                      <div className={styles.themeOption} onClick={(e) => { e.stopPropagation(); setTheme("green"); setIsThemeOpen(false); setIsDropdownOpen(false); }}>
-                        <span className={styles.colorBadge} style={{ backgroundColor: "#54BE96" }} />
-                        Green {theme === "green" && "✓"}
-                      </div>
-                      <div className={styles.themeOption} onClick={(e) => { e.stopPropagation(); setTheme("blue"); setIsThemeOpen(false); setIsDropdownOpen(false); }}>
-                        <span className={styles.colorBadge} style={{ backgroundColor: "#3470FF" }} />
-                        Blue {theme === "blue" && "✓"}
-                      </div>
-                      <div className={styles.themeOption} onClick={(e) => { e.stopPropagation(); setTheme("orange"); setIsThemeOpen(false); setIsDropdownOpen(false); }}>
-                        <span className={styles.colorBadge} style={{ backgroundColor: "#FC832C" }} />
-                        Orange {theme === "orange" && "✓"}
-                      </div>
-                    </div>
-                  </div>
-                  <div className={styles.dropdownItem} onClick={() => { logout(); setIsDropdownOpen(false); }}>
-                    Log Out
-                  </div>
-                </div>
-              )}
-            </div>
-          ) : (
-            <>
-              <button className={styles.loginBtn} onClick={() => setAuthType("login")}>Log In</button>
-              <button className={styles.registerBtn} onClick={() => setAuthType("register")}>Registration</button>
-            </>
-          )}
-        </div>
+        {!user && (
+          <div className={styles.authBlock}>
+            <button type="button" className={styles.loginBtn} onClick={() => setAuthType("login")}>Log In</button>
+            <button type="button" className={styles.registerBtn} onClick={() => setAuthType("register")}>Registration</button>
+          </div>
+        )}
       </header>
 
       {authType && (

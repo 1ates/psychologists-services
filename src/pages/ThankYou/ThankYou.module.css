@@ -1,0 +1,51 @@
+.container {
+  display: grid;
+  min-height: calc(100vh - 96px);
+  place-content: center;
+  justify-items: center;
+  gap: 16px;
+  padding: 48px 20px;
+  text-align: center;
+  background: var(--surface-muted);
+}
+
+.icon {
+  display: grid;
+  width: 64px;
+  height: 64px;
+  place-items: center;
+  margin: 0;
+  border-radius: 50%;
+  background: var(--primary-color);
+  color: #fff;
+  font-size: 32px;
+  font-weight: 700;
+}
+
+.container h1,
+.container p {
+  margin: 0;
+}
+
+.container p:not(.icon) {
+  max-width: 520px;
+  color: var(--text-muted);
+}
+
+.link {
+  display: inline-flex;
+  align-items: center;
+  min-height: 48px;
+  margin-top: 16px;
+  padding: 12px 24px;
+  border-radius: 30px;
+  background: var(--primary-color);
+  color: #fff;
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.link:focus-visible {
+  outline: 3px solid var(--primary-shadow);
+  outline-offset: 3px;
+}

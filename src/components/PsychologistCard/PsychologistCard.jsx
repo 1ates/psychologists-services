@@ -1,7 +1,7 @@
-import React, { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
 import styles from "./PsychologistCard.module.css";
 import { useAuth } from "../../context/AuthContext";
-import { doc, getDoc, updateDoc, arrayUnion, arrayRemove } from "firebase/firestore";
+import { get, ref, remove, set } from "firebase/database";
 import { db } from "../../firebase";
 import AppointmentModal from "../AppointmentModal/AppointmentModal";
 import Icon from "../Icon/Icon";
@@ -9,22 +9,32 @@ import Icon from "../Icon/Icon";
 const PsychologistCard = ({ psychologist, onAuthRequired, onFavoriteChange }) => {
   const { user } = useAuth();
   const [isFavorite, setIsFavorite] = useState(false);
+  const [isFavoriteLoading, setIsFavoriteLoading] = useState(false);
+  const [favoriteError, setFavoriteError] = useState(null);
   const [isExpanded, setIsExpanded] = useState(false);
   const [isAppointmentOpen, setIsAppointmentOpen] = useState(false);
 
   useEffect(() => {
+    let isCancelled = false;
+
     const checkFavorite = async () => {
-      if (user) {
-        const userDoc = await getDoc(doc(db, "users", user.uid));
-        if (userDoc.exists()) {
-          const favorites = userDoc.data().favorites || [];
-          setIsFavorite(favorites.includes(psychologist.id));
-        }
-      } else {
+      if (!user) {
         setIsFavorite(false);
+        return;
+      }
+
+      try {
+        const snapshot = await get(ref(db, `users/${user.uid}/favorites/${psychologist.id}`));
+        if (!isCancelled) setIsFavorite(snapshot.val() === true);
+      } catch {
+        if (!isCancelled) setFavoriteError("We could not load this favorite state.");
       }
     };
+
     checkFavorite();
+    return () => {
+      isCancelled = true;
+    };
   }, [user, psychologist.id]);
 
   const toggleFavorite = async () => {
@@ -33,18 +43,23 @@ const PsychologistCard = ({ psychologist, onAuthRequired, onFavoriteChange }) =>
       return;
     }
 
+    setFavoriteError(null);
+    setIsFavoriteLoading(true);
+
     try {
-      const userRef = doc(db, "users", user.uid);
+      const favoriteRef = ref(db, `users/${user.uid}/favorites/${psychologist.id}`);
       if (isFavorite) {
-        await updateDoc(userRef, { favorites: arrayRemove(psychologist.id) });
+        await remove(favoriteRef);
         setIsFavorite(false);
         if (onFavoriteChange) onFavoriteChange(psychologist.id);
       } else {
-        await updateDoc(userRef, { favorites: arrayUnion(psychologist.id) });
+        await set(favoriteRef, true);
         setIsFavorite(true);
       }
-    } catch (error) {
-      console.error("Error updating favorites:", error);
+    } catch {
+      setFavoriteError("We could not update favorites. Please try again.");
+    } finally {
+      setIsFavoriteLoading(false);
     }
   };
 
@@ -57,10 +72,10 @@ const PsychologistCard = ({ psychologist, onAuthRequired, onFavoriteChange }) =>
   };
 
   return (
-    <div className={styles.card}>
+    <article className={styles.card}>
       <div className={styles.avatarContainer}>
         <img src={psychologist.avatar_url} alt={psychologist.name} className={styles.avatar} />
-        <span className={styles.onlineIndicator} />
+        <span className={styles.onlineIndicator} aria-hidden="true" />
       </div>
       <div className={styles.content}>
         <div className={styles.headerInfo}>
@@ -68,7 +83,14 @@ const PsychologistCard = ({ psychologist, onAuthRequired, onFavoriteChange }) =>
           <div className={styles.actions}>
             <span className={styles.rating}><Icon name="star" width={16} height={16} /> Rating: {psychologist.rating}</span>
             <span>Price / 1 hour: <strong className={styles.price}>{psychologist.price_per_hour}$</strong></span>
-            <button className={styles.favoriteBtn} onClick={toggleFavorite}>
+            <button
+              type="button"
+              className={styles.favoriteBtn}
+              onClick={toggleFavorite}
+              disabled={isFavoriteLoading}
+              aria-label={isFavorite ? `Remove ${psychologist.name} from favorites` : `Add ${psychologist.name} to favorites`}
+              aria-pressed={isFavorite}
+            >
               <Icon name={isFavorite ? "heart-filled" : "heart"} width={24} height={22} />
             </button>
           </div>
@@ -85,41 +107,43 @@ const PsychologistCard = ({ psychologist, onAuthRequired, onFavoriteChange }) =>
         <p className={styles.about}>{psychologist.about}</p>
 
         {!isExpanded && (
-          <button className={styles.readMoreBtn} onClick={() => setIsExpanded(true)}>
+          <button type="button" className={styles.readMoreBtn} onClick={() => setIsExpanded(true)}>
             Read more
           </button>
         )}
 
         {isExpanded && (
           <div className={styles.reviewsSection}>
-            {psychologist.reviews && psychologist.reviews.map((rev, index) => (
-              <div key={index} className={styles.reviewItem}>
+            {psychologist.reviews?.map((review, index) => (
+              <div key={`${review.reviewer}-${index}`} className={styles.reviewItem}>
                 <div className={styles.reviewHeader}>
-                  <div className={styles.reviewerAvatar}>
-                    {rev.reviewer.charAt(0)}
+                  <div className={styles.reviewerAvatar} aria-hidden="true">
+                    {review.reviewer.charAt(0)}
                   </div>
                   <div>
-                    <h4 className={styles.reviewerName}>{rev.reviewer}</h4>
-                    <span className={styles.reviewRating}><Icon name="star" width={14} height={14} /> {rev.rating}</span>
+                    <h4 className={styles.reviewerName}>{review.reviewer}</h4>
+                    <span className={styles.reviewRating}><Icon name="star" width={14} height={14} /> {review.rating}</span>
                   </div>
                 </div>
-                <p className={styles.reviewComment}>{rev.comment}</p>
+                <p className={styles.reviewComment}>{review.comment}</p>
               </div>
             ))}
 
             <div className={styles.appointmentBtnContainer}>
-              <button className={styles.appointmentBtn} onClick={handleAppointmentClick}>
+              <button type="button" className={styles.appointmentBtn} onClick={handleAppointmentClick}>
                 Make an appointment
               </button>
             </div>
           </div>
         )}
+
+        {favoriteError && <p className={styles.error} role="alert">{favoriteError}</p>}
       </div>
 
       {isAppointmentOpen && (
         <AppointmentModal psychologist={psychologist} onClose={() => setIsAppointmentOpen(false)} />
       )}
-    </div>
+    </article>
   );
 };
 
