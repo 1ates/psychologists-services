@@ -29,7 +29,12 @@ A web application for finding and booking appointments with professional psychol
 
 ## Deployment
 
-This project supports Vercel and GitHub Pages. A production URL is intentionally not recorded until a deployment has been completed and verified.
+This project supports Vercel and GitHub Pages.
+
+### Live URLs
+
+- **Vercel**: https://psychologists-services-rho-eight.vercel.app/
+- **GitHub Pages**: https://1ates.github.io/psychologists-services/
 
 ### Vercel
 
@@ -47,5 +52,3 @@ The [GitHub Pages workflow](.github/workflows/deploy-pages.yml) builds and deplo
 2. Add the `VITE_FIREBASE_*` values from `.env.example` as repository Actions secrets with the same names.
 3. The workflow sets `VITE_BASE_PATH` to `/<repository-name>/` for the project-site path and creates `dist/404.html` from the SPA entry point for direct route fallback.
 4. Verify the deployed home, psychologists, and favorites routes before recording a public URL.
-
-No custom domain or production URL is configured in the repository yet.
